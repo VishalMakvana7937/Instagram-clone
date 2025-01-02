@@ -11,23 +11,23 @@
 // })
 
 const express = require('express');
-const { data } = require('./data');
 const app = express();
-const cors = require('cors');
 const port = 5000;
+const mongoose = require('mongoose');
+const mongoUrl = require('./key');
 
-app.use(cors());
+require('./models/model');
+app.use(express.json());
+app.use(require("./routes/auth"))
 
-app.get('/', (req, res) => {
-    // res.end("My server data..!");
-    res.json(data);
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.log("Error connecting to MongoDB: ", err);
+  });
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
-
-app.get('/about', (req, res) => {
-    res.json("About Page..!")
-});
-
-app.listen(5000, () => {
-    console.log(" Server is running on port 5000");
-
-})
