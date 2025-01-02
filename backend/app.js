@@ -19,6 +19,7 @@ const port = 5000;
 app.use(cors());
 
 app.get('/', (req, res) => {
+    // res.end("My server data..!");
     res.json(data);
 });
 
