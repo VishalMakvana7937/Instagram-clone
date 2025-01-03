@@ -12,7 +12,7 @@ router.post('/signup', (req, res) => {
     const { name, userName, email, password } = req.body;
 
     if (!name || !userName || !email || !password) {
-        res.status(400).json({ message: 'Please fill in all fields' });
+        return res.status(400).json({ message: 'Please fill in all fields' });
     }
 
     USER.findOne({ $or: [{ email: email }, { userName: userName }] }).then((SavedUser) => {
@@ -25,7 +25,7 @@ router.post('/signup', (req, res) => {
             const user = new USER({ name, userName, email, password: hashedPassword });
             user.save()
                 .then(() => {
-                    res.json({ message: 'User created successfully' });
+                    res.json({ message: 'Register successfully' });
                 })
                 .catch((err) => {
                     res.status(400).json({ message: 'Error creating user' });
