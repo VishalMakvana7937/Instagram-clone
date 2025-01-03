@@ -16,9 +16,23 @@ const SignUp = () => {
   const notifyA = (msg) => toast.error(msg);
   const notifyB = (msg) => toast.success(msg);
 
-  const handleSignUp = () => {
-    // senging data to backend
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
+
+
+  const handleSignUp = () => {
+
+    if (!emailRegex.test(email)) {
+      notifyA("Invalid email")
+      return
+    } else if (!passRegex.test(password)) {
+      notifyA("Password must contain at least 8 characters, including at least 1 number and 1 includes both lower and uppercase letters and special characters for example #,?,!")
+      return
+    }
+
+
+    // senging data to backend
     fetch("http://localhost:5000/signup", {
       method: "POST",
       headers: {
@@ -30,13 +44,13 @@ const SignUp = () => {
         userName: userName,
         password: password
       })
-    }).then((response) => response.json())
-      .then((data) => {
-        if (data.message) {
-          notifyA(data.message);
+    }).then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          notifyA(data.error)
         } else {
-          notifyB(data.message);
-          navigate("/signin");
+          notifyB(data.message)
+          navigate("/signin")
         }
         console.log(data)
       })
