@@ -3,9 +3,17 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const USER = mongoose.model("INSTAUSER");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { jwt_secret } = require('../key');
+const requireLogin = require("../middlewares/requireLogin")
 
 router.get('/', (req, res) => {
     res.send('Hello World!');
+})
+
+router.get("/createPost", requireLogin, (req, res) => {
+    console.log("Heloo auth..!");
+
 })
 
 router.post('/signup', (req, res) => {
@@ -50,7 +58,12 @@ router.post('/signin', (req, res) => {
 
         bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
-                return res.status(200).json({ message: 'Login successfully' });
+                // return res.status(200).json({ message: 'Login successfully' });
+
+                const token = jwt.sign({ _id: user.id }, jwt_secret,);
+                console.log(' token..!', token);
+                res.json({ token: token });
+
             } else {
                 return res.status(400).json({ error: 'Invalid password' });
             }
