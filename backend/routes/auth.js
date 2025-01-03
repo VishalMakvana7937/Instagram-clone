@@ -18,7 +18,7 @@ router.post('/signup', (req, res) => {
     USER.findOne({ $or: [{ email: email }, { userName: userName }] }).then((SavedUser) => {
         console.log(SavedUser);
         if (SavedUser) {
-            return res.status(400).json({ message: 'User already exists with this email or username' });
+            return res.status(400).json({ error: 'User already exists with this email or username' });
         }
 
         bcrypt.hash(password, 12).then((hashedPassword) => {
@@ -33,6 +33,35 @@ router.post('/signup', (req, res) => {
         })
     })
 
+})
+
+router.post('/signin', (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Please enter email and password' });
+    }
+
+    USER.findOne({ email: email }).then((user) => {
+
+        if (!user) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        bcrypt.compare(password, user.password).then((isMatch) => {
+            if (isMatch) {
+                return res.status(200).json({ message: 'Login successfully' });
+            } else {
+                return res.status(400).json({ error: 'Invalid password' });
+            }
+
+        }).catch((err) => {
+            console.log(err);
+            // return res.status(400).json({ message: 'Invalid password' });
+        })
+
+
+    })
 })
 
 module.exports = router;
