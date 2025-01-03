@@ -4,24 +4,23 @@ const mongoose = require('mongoose');
 const requireLogin = require("../middlewares/requireLogin");
 const POST = mongoose.model("POST");
 
-router.get("/createPost", requireLogin, (req, res) => {
-    const { title, body } = req.body;
+router.post("/createPost", requireLogin, (req, res) => {
+    const { body, pic } = req.body;
+    console.log(pic)
 
-    if (!title || !body) {
-        return res.status(400).json({ error: "Please fill in all fields" });
+    if (!body || !pic) {
+        return res.status(422).json({ error: "Please add all the fields" })
     }
-    req.user
 
+    console.log(req.user)
     const post = new POST({
-        title,
         body,
+        photo: pic,
         postedBy: req.user
     })
     post.save().then((result) => {
-        return res.json({ post: result });
-    }).catch((err) => {
-        console.log(err);
-    })
+        return res.json({ post: result })
+    }).catch(err => console.log(err))
 
 })
 

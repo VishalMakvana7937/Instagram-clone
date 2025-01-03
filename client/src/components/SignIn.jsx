@@ -41,6 +41,8 @@ const SignIn = () => {
         } else {
           notifyB("Signed In Successfully");
           console.log(data);
+          console.log("My token..!", data.token);
+          localStorage.setItem("jwt", data.token)
           navigate("/");
         }
       })
