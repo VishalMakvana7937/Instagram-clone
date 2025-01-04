@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from "../../public/logo.png"
 import '../components/Navbar.css'
 import { Link } from 'react-router-dom'
+import { LoginContext } from './context/Context'
 
 const Navbar = () => {
+
+    const { setMoalOpen } = useContext(LoginContext);
 
     const loginStatus = (login) => {
         const token = localStorage.getItem('jwt');
@@ -12,6 +15,9 @@ const Navbar = () => {
                 <>
                     <li><Link to='/profile'>Profile</Link></li>
                     <Link to='/createPost'>Create Post</Link>
+                    <Link to={""}>
+                        <button className='primaryBtn' onClick={() => setMoalOpen(true)}>Log out</button>
+                    </Link>
                 </>
             ]
         } else {

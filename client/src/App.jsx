@@ -10,16 +10,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreatePost from './components/CreatePost'
 import { LoginContext } from './components/context/Context'
 import { useState } from 'react'
+import Model from './components/Model'
 
 function App() {
 
   const [isLogin, setIsLogin] = useState(false);
+  const [moalOpen, setMoalOpen] = useState(false);
 
   return (
     <>
       <BrowserRouter>
         <div className="App">
-          <LoginContext.Provider value={{ setIsLogin }}>
+          <LoginContext.Provider value={{ setIsLogin, setMoalOpen }}>
             <Navbar login={isLogin} />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -29,6 +31,10 @@ function App() {
               <Route path="/createPost" element={<CreatePost />} />
             </Routes>
             <ToastContainer theme='dark' />
+            {/* <Model /> */}
+            {
+              moalOpen && <Model setMoalOpen={setMoalOpen} />
+            }
           </LoginContext.Provider>
         </div>
       </BrowserRouter>
