@@ -98,5 +98,34 @@ router.put("/comment", requireLogin, async (req, res) => {
     }
 });
 
+router.delete("/deletePost/:postid", requireLogin, async (req, res) => {
+    try {
+        console.log(req.params.postid);  // Check the value of postid parameter
+
+        // Find the post by its MongoDB _id, assuming the default id is _id
+        const post = await POST.findById(req.params.postid).populate("postedBy", "_id");
+
+        // Check if the post exists
+        if (!post) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        // Ensure that the post is being deleted only by the user who created it
+        if (post.postedBy._id.toString() === req.user._id.toString()) {
+            // If the post belongs to the user, delete it
+            await POST.findByIdAndDelete(req.params.postid);  // Deleting the post
+            return res.json({ message: "Post deleted successfully" });
+        }
+
+        // If the user is not the creator, return a forbidden response
+        res.status(403).json({ error: "You are not authorized to delete this post" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+
+
 
 module.exports = router
