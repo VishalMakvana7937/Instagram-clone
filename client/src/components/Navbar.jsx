@@ -32,7 +32,8 @@ const Navbar = () => {
 
     return (
         <div className='navbar'>
-            <img src={logo} alt="insta-logo" />\
+            <Link to='/signin'><img src={logo} alt="insta-logo" /></Link>
+            
             <ul className='nav-menu'>
                 {loginStatus()}
             </ul>

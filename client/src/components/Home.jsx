@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../components/Home.css'
 import { useNavigate } from 'react-router-dom';
+import { FaRegHeart } from "react-icons/fa";
 
 const Home = () => {
 
@@ -26,6 +27,54 @@ const Home = () => {
 
   }, []);
 
+  const likePost = (id) => {
+    fetch("http://localhost:5000/like", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: id
+      })
+    }).then(res => res.json())
+      .then((result) => {
+        const newData = data.map((posts) => {
+          if (posts._id == result._id) {
+            return result
+          } else {
+            return posts
+          }
+        })
+        setData(newData)
+        console.log(result)
+      })
+  }
+
+  const unlikePost = (id) => {
+    fetch("http://localhost:5000/unlike ", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: id
+      })
+    }).then(res => res.json())
+      .then((result) => {
+        const newData = data.map((posts) => {
+          if (posts._id == result._id) {
+            return result
+          } else {
+            return posts
+          }
+        })
+        setData(newData)
+        console.log(result)
+      })
+  }
+
   return (
     <div className='home'>
       {
@@ -44,8 +93,17 @@ const Home = () => {
               </div>
 
               <div className="card-content">
-                <span class="material-symbols-outlined">favorite</span>
-                <p>1 Like</p>
+                {/* {
+                  post.likes.includes(JSON.parse(localStorage.getItem("user"))._id) ?
+                    (<span class="material-symbols-outlined material-symbols-outlined-red" onClick={() => unlikePost(post._id)}>favorite_border</span>) :
+                    (<span class="material-symbols-outlined" onClick={() => likePost(post._id)}>favorite</span>)
+                } */}
+                {
+                  post.likes.includes(JSON.parse(localStorage.getItem("user"))._id) ?
+                    (<span id='FaRegHeart_icon' onClick={() => unlikePost(post._id)}><FaRegHeart /></span>) :
+                    (<span onClick={() => likePost(post._id)}><FaRegHeart /></span>)
+                }
+                <p>{post.likes.length} Like</p>
                 <p>{post.body}</p>
               </div>
 
@@ -57,7 +115,7 @@ const Home = () => {
             </div>
           )
         })
-      } 
+      }
     </div>
   )
 }

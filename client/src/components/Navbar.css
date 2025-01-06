@@ -1,5 +1,5 @@
-img {
-    width: 10%;
+.navbar a img {
+    width: 30%;
     object-fit: contain;
 }
 

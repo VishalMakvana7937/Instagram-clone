@@ -46,6 +46,7 @@ const SignIn = () => {
           console.log(data);
           console.log("My token..!", data.token);
           localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           setIsLogin(true);
           navigate("/");
         }
