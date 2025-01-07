@@ -15,8 +15,10 @@ const Navbar = () => {
                 <>
                     <li><Link to='/profile'>Profile</Link></li>
                     <Link to='/createPost'>Create Post</Link>
+                    <Link style={ {marginLeft: "20px"}} to='/following/post'>My Following Post</Link>
                     <Link to={""}>
-                        <button className='primaryBtn' onClick={() => {setMoalOpen(true); console.log("clicked");
+                        <button className='primaryBtn' onClick={() => {
+                            setMoalOpen(true); console.log("clicked");
                         }}>Log out</button>
                     </Link>
                 </>
@@ -34,7 +36,7 @@ const Navbar = () => {
     return (
         <div className='navbar'>
             <Link to='/'><img src={logo} alt="insta-logo" /></Link>
-            
+
             <ul className='nav-menu'>
                 {loginStatus()}
             </ul>

@@ -52,7 +52,8 @@ router.put("/like", requireLogin, async (req, res) => {
                 $push: { likes: req.user._id }
             },
             { new: true } // Ensure the updated document is returned
-        );
+        )
+            .populate("postedBy", "_id name")
 
         return res.json(result);
     } catch (err) {
@@ -69,7 +70,8 @@ router.put("/unlike", requireLogin, async (req, res) => {
                 $pull: { likes: req.user._id }
             },
             { new: true } // This will return the modified document instead of the original
-        );
+        )
+            .populate("postedBy", "_id name")
 
         // Send the updated post as a response
         return res.json(result);
@@ -125,6 +127,15 @@ router.delete("/deletePost/:postid", requireLogin, async (req, res) => {
     }
 });
 
-
+router.get("/myfollowing/post", requireLogin, async (req, res) => {
+    POST.find({ postedBy: { $in: req.user.following } })
+        .populate("postedBy", "_id name")
+        .populate("comments.postedBy", "_id name")
+        .then((result) => {
+            res.json(result);
+        }).catch((err) => {
+            res.status(500).json({ error: "Server error" });
+        });
+})
 
 module.exports = router

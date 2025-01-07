@@ -12,6 +12,7 @@ import { LoginContext } from './components/context/Context'
 import { useState } from 'react'
 import Model from './components/Model'
 import UserProfile from './components/UserProfile'
+import MyFollowing from './components/MyFollowing'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
               <Route path="/signin" element={<SignIn />} />
               <Route exact path="/profile" element={<Profile />} />
               <Route path="/createPost" element={<CreatePost />} />
+              <Route path="/following/post" element={<MyFollowing />} />
               <Route path="/profile/:userid" element={<UserProfile />} />
             </Routes>
             <ToastContainer theme='dark' />
