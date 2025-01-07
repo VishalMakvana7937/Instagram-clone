@@ -91,7 +91,7 @@ const ProfilePic = ({ changeprofile }) => {
                     <input type="file" ref={hiiddenFile} accept='image/*' style={{ display: "none" }} onChange={(e) => { setImg(e.target.files[0]) }} />
                 </div>
                 <div style={{ color: "#1ea1f7", borderTop: "1px solid #00000030" }}>
-                    <button className='upload-btn' style={{ color: "#ec4956" }}>Remove current Photo</button>
+                    <button className='upload-btn' style={{ color: "#ec4956" }} onClick={() => {setUrl(null);postpic()}}>Remove current Photo</button>
                 </div>
                 <div style={{ color: "#1ea1f7", borderTop: "1px solid #00000030" }}>
                     <button style={{ background: "none", border: "none", color: "#1ea1f7", cursor: "pointer", fontSize: "15px" }} onClick={() => { changeprofile() }}>Cancel</button>
