@@ -49,7 +49,7 @@ const Profile = () => {
         <div className="profile-data">
           <h1>{JSON.parse(localStorage.getItem("user")).name}</h1>
           <div className="profile-info" style={{ display: "flex" }}>
-            <p>40 post</p>
+            <p>2 post</p>
             <p>40 followers</p>
             <p>40 following</p>
           </div>

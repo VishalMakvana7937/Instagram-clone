@@ -5,6 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import { FaHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom'
 
 
 const Home = () => {
@@ -134,7 +135,9 @@ const Home = () => {
                 alt="profile_img"
               />
             </div>
-            <h5>{post.postedBy.name}</h5>
+            <h5><Link to={`/profile/${post.postedBy._id}`}>
+              {post.postedBy.name}
+            </Link></h5>
           </div>
 
           <div className="card-image">
@@ -194,7 +197,9 @@ const Home = () => {
                     alt="profile_img"
                   />
                 </div>
-                <h5>{item.postedBy.name}</h5>
+                <h5>
+                  {item.postedBy.name}
+                </h5>
               </div>
 
               <div className="comment-section">
