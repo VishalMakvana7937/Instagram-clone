@@ -61,7 +61,6 @@ router.put("/like", requireLogin, async (req, res) => {
     }
 });
 
-
 router.put("/unlike", requireLogin, async (req, res) => {
     try {
         const result = await POST.findByIdAndUpdate(
@@ -125,7 +124,6 @@ router.delete("/deletePost/:postid", requireLogin, async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
-
 
 
 

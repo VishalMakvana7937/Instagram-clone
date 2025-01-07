@@ -7,6 +7,8 @@ const UserProfile = () => {
     const { userid } = useParams();
     console.log(userid);
 
+    const [isFollow, setisFollow] = useState(false);
+
     const [user, setUser] = useState("");
     const [post, setPost] = useState([]);
 
@@ -22,6 +24,40 @@ const UserProfile = () => {
     //     }
     //   }
 
+    const followUser = (userid) => {
+        console.log(userid);
+        fetch('http://localhost:5000/follow', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({ followId: userid })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setisFollow(true);
+            })
+    }
+
+    const unfollowUser = (userid) => {
+        console.log(userid);
+        fetch('http://localhost:5000/unfollow', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({ followId: userid })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setisFollow(false);
+            })
+    }
+
     useEffect(() => {
         fetch(`http://localhost:5000/user/${userid}`, {
             method: "GET",
@@ -34,11 +70,18 @@ const UserProfile = () => {
                 console.log(result);
                 setUser(result.user)
                 setPost(result.post)
+                if (
+                    result.user.followers.includes(
+                        JSON.parse(localStorage.getItem("user"))._id
+                    )
+                ) {
+                    setisFollow(true);
+                }
             })
             .catch((err) => {
                 console.error("Error fetching data:", err);
             });
-    }, []);
+    }, [isFollow]);
 
     return (
         <div className="profile">
@@ -51,11 +94,14 @@ const UserProfile = () => {
                 </div>
 
                 <div className="profile-data">
-                    <h1>{user.name}</h1>
+                    <div >
+                        <h2>{user.name}</h2>
+                        <button className='followBtn' onClick={() => { if (isFollow) { unfollowUser(user._id) } else { followUser(user._id) } }}>{isFollow ? "Unfollow" : "Follow"}</button>
+                    </div>
                     <div className="profile-info" style={{ display: "flex" }}>
                         <p>{post.length} post</p>
-                        <p>40 followers</p>
-                        <p>40 following</p>
+                        <p>{user.followers ? user.followers.length : 0} followers</p>
+                        <p>{user.followers ? user.following.length : 0} following</p>
                     </div>
                 </div>
             </div>
