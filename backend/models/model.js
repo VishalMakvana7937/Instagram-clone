@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
             type: ObjectId,
             ref: 'INSTAUSER'
         }
-    ]
+    ],
+    photo: {
+        type: String,
+
+    }
 })
 
 mongoose.model("INSTAUSER", userSchema);

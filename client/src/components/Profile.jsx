@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import '../components/Profile.css';
 import PostDetails from './PostDetails';
+import ProfilePic from './ProfilePic';
 
 const Profile = () => {
+
+  var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+
   const [profile, setProfile] = useState([]);
   const [show, setShow] = useState(false);
   const [post, setPost] = useState([]);
+  const [changePic, setChangePic] = useState(false);
+  const [user, setUser] = useState("");
 
 
   const toggleDetails = (posts) => {
@@ -19,8 +25,17 @@ const Profile = () => {
     }
   }
 
+  const changeprofile = () => {
+    if (changePic) {
+      setChangePic(false)
+    } else {
+      setChangePic(true)
+    }
+  }
+
+
   useEffect(() => {
-    fetch("http://localhost:5000/myposts", {
+    fetch(`http://localhost:5000/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("jwt"),
@@ -28,7 +43,8 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setProfile(result);
+        setProfile(result.post);
+        setUser(result.user)
         console.log(result);
       })
       .catch((err) => {
@@ -41,7 +57,8 @@ const Profile = () => {
       <div className="profile-frame">
         <div className="profile-pic">
           <img
-            src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
+            onClick={() => { changeprofile() }}
+            src={user.photo ? user.photo : picLink}
             alt="profile_img"
           />
         </div>
@@ -49,9 +66,9 @@ const Profile = () => {
         <div className="profile-data">
           <h1>{JSON.parse(localStorage.getItem("user")).name}</h1>
           <div className="profile-info" style={{ display: "flex" }}>
-            <p>2 post</p>
-            <p>40 followers</p>
-            <p>40 following</p>
+            <p>{profile ? profile.length : 0} posts</p>
+            <p>{user.followers ? user.followers.length : 0} followers</p>
+            <p>{user.following ? user.following.length : 0} following</p>
           </div>
         </div>
       </div>
@@ -80,6 +97,11 @@ const Profile = () => {
       {
         show && (
           <PostDetails item={post} toggleDetails={toggleDetails} />
+        )
+      }
+      {
+        changePic && (
+          <ProfilePic changeprofile={changeprofile} />
         )
       }
     </div>

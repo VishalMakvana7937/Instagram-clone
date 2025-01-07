@@ -80,5 +80,18 @@ router.put("/unfollow", requireLogin, async (req, res) => {
     }
 });
 
+router.put("/uploadprofilepic", requireLogin, async (req, res) => {
+    USER.findByIdAndUpdate(req.user._id, {
+        $set: { photo: req.body.pic }
+    }, {
+        new: true
+    })
+        .then(user => {
+            res.json(user)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+})
 
 module.exports = router;

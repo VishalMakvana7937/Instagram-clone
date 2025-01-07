@@ -4,6 +4,7 @@ import PostDetails from './PostDetails';
 import { useParams } from 'react-router-dom';
 
 const UserProfile = () => {
+    var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
     const { userid } = useParams();
     console.log(userid);
 
@@ -88,8 +89,7 @@ const UserProfile = () => {
             <div className="profile-frame">
                 <div className="profile-pic">
                     <img
-                        src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
-                        alt="profile_img"
+                        src={user.photo ? user.photo : picLink}
                     />
                 </div>
 

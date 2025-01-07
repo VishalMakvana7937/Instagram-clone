@@ -6,8 +6,9 @@ const POST = mongoose.model("POST");
 
 router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name photo")
         .populate("comments.postedBy", "_id name")
+        .sort("-createdAt")
         .then(posts => res.json(posts))
         .catch(err => console.log(err))
 })
@@ -53,7 +54,7 @@ router.put("/like", requireLogin, async (req, res) => {
             },
             { new: true } // Ensure the updated document is returned
         )
-            .populate("postedBy", "_id name")
+            .populate("postedBy", "_id name photo")
 
         return res.json(result);
     } catch (err) {
@@ -71,7 +72,7 @@ router.put("/unlike", requireLogin, async (req, res) => {
             },
             { new: true } // This will return the modified document instead of the original
         )
-            .populate("postedBy", "_id name")
+            .populate("postedBy", "_id name photo")
 
         // Send the updated post as a response
         return res.json(result);

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 
 
 const Home = () => {
+  var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -131,7 +132,7 @@ const Home = () => {
           <div className="card-header">
             <div className="card-pic">
               <img
-                src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
+                src={post.postedBy.photo ? post.postedBy.photo : picLink}
                 alt="profile_img"
               />
             </div>

@@ -22,6 +22,6 @@ const postSchema = new mongoose.Schema({
         comment: { type: String },
         postedBy: { type: ObjectId, ref: "INSTAUSER" }
     }],
-})
+}, { timestamps: true });
 
 mongoose.model("POST", postSchema)
