@@ -36,6 +36,7 @@ router.get("/myposts", requireLogin, (req, res) => {
     console.log(req.user);
     POST.find({ postedBy: req.user._id })
         .populate("postedBy", "_id name")
+        .populate("comments.postedBy", "_id name")
         .then(myposts => {
             res.json(myposts)
         })
