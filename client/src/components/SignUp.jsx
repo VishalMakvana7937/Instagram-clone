@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import logo from "../../public/logo.png";
 import '../components/SignUp.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import { LoginContext } from './context/Context';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -11,6 +14,8 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+
+  const { setIsLogin } = useContext(LoginContext);
 
   const notifyA = (msg) => toast.error(msg);
   const notifyB = (msg) => toast.success(msg);
@@ -78,6 +83,43 @@ const SignUp = () => {
       });
   };
 
+  const continueWithGoogle = (credentialResponse) => {
+    console.log(credentialResponse);
+    const jwtDetail = jwtDecode(credentialResponse.credential);
+    console.log(jwtDetail);
+
+    fetch("http://localhost:5000/googleLogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: jwtDetail.name,
+        email: jwtDetail.email,
+        userName: jwtDetail.given_name,  // Change to use given_name for username
+        email_verified: jwtDetail.email_verified,
+        clientId: credentialResponse.client_id,
+        Photo: jwtDetail.picture,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          notifyA(data.error);
+        } else {
+          notifyB("Signed In Successfully");
+          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          setIsLogin(true);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error);
+        notifyA('An error occurred while signing up. Please try again later.');
+      });
+  }
+
   return (
     <div className="signUp">
       <div className="form-container">
@@ -134,6 +176,15 @@ const SignUp = () => {
             id="submit-btn"
             value="Sign up"
             onClick={handleSignUp}
+          />
+          <hr />
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              continueWithGoogle(credentialResponse);
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
           />
         </div>
         <div className="form2">

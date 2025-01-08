@@ -70,4 +70,42 @@ router.post('/signin', (req, res) => {
     })
 })
 
+router.post('/googleLogin', (req, res) => {
+    const { email_verified, email, name, clientId, userName, Photo } = req.body;
+    if (email_verified) {
+        USER.findOne({ email: email }).then((user) => {
+
+            if (user) {
+                const token = jwt.sign({ _id: user.id }, jwt_secret);
+                console.log('token..!', token);
+
+                const { _id, name, email, userName } = user;
+                res.json({ token, user: { _id, name, email, userName } });
+                console.log({ token, user: { _id, name, email, userName } });
+            } else {
+                const password = email + clientId;
+                const user = new USER({ name, userName, email, password: password, Photo });
+                user.save()
+                    .then(() => {
+
+                        let userId = user._id.toString();
+
+                        const token = jwt.sign({ _id: userId }, jwt_secret);
+                        console.log('token..!', token);
+
+                        const { _id, name, email, userName } = user;
+                        res.json({ token, user: { _id, name, email, userName } });
+                        console.log({ token, user: { _id, name, email, userName } });
+                    })
+                    .catch((err) => {
+                        res.status(400).json({ message: 'Error creating user' });
+                    });
+            }
+        });
+    } else {
+        res.status(400).json({ message: "Email is not verified" });
+    }
+});
+
+
 module.exports = router;

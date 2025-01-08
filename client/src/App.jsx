@@ -13,6 +13,7 @@ import { useState } from 'react'
 import Model from './components/Model'
 import UserProfile from './components/UserProfile'
 import MyFollowing from './components/MyFollowing'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
 
@@ -23,23 +24,26 @@ function App() {
     <>
       <BrowserRouter>
         <div className="App">
-          <LoginContext.Provider value={{ setIsLogin, setMoalOpen }}>
-            <Navbar login={isLogin} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route exact path="/profile" element={<Profile />} />
-              <Route path="/createPost" element={<CreatePost />} />
-              <Route path="/following/post" element={<MyFollowing />} />
-              <Route path="/profile/:userid" element={<UserProfile />} />
-            </Routes>
-            <ToastContainer theme='dark' />
-            {/* <Model /> */}
-            {
-              moalOpen && <Model setMoalOpen={setMoalOpen} />
-            }
-          </LoginContext.Provider>
+          <GoogleOAuthProvider clientId="955102643932-bqg1fdotq9mndgdu3e6utk4se8juie0b.apps.googleusercontent.com">
+            <LoginContext.Provider value={{ setIsLogin, setMoalOpen }}>
+              <Navbar login={isLogin} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route exact path="/profile" element={<Profile />} />
+                <Route path="/createPost" element={<CreatePost />} />
+                <Route path="/following/post" element={<MyFollowing />} />
+                <Route path="/profile/:userid" element={<UserProfile />} />
+              </Routes>
+              <ToastContainer theme='dark' />
+              {/* <Model /> */}
+              {
+                moalOpen && <Model setMoalOpen={setMoalOpen} />
+              }
+            </LoginContext.Provider>
+          </GoogleOAuthProvider>
+
         </div>
       </BrowserRouter>
     </>
