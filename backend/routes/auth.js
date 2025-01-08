@@ -6,10 +6,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwt_secret } = require('../key');
 
-router.get('/', (req, res) => {
-    res.send('Hello World!');
-})
-
 router.post('/signup', (req, res) => {
     const { name, userName, email, password } = req.body;
 
