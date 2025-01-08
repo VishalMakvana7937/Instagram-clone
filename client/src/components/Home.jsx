@@ -16,6 +16,8 @@ const Home = () => {
   const [comment, setComment] = useState('');
   const [show, setShow] = useState(false);
   const [item, setItem] = useState([]);
+  let limit = 10;
+  let skip = 0;
 
   const notifyA = (msg) => toast.error(msg);
   const notifyB = (msg) => toast.success(msg);
@@ -27,17 +29,34 @@ const Home = () => {
     if (!token) {
       navigate("/signup");
     }
+    fetchPost();
+    window.addEventListener("scroll", handelescroll)
+    return () => {
+      window.removeEventListener("scroll", handelescroll)
+    }
+  }, []);
 
-    fetch("http://localhost:5000/allposts", {
+  const fetchPost = async () => {
+    fetch(`http://localhost:5000/allposts?limit=${limit}&skip=${skip}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("jwt")
       }
     }).then(res => res.json())
-      .then(result => setData(result))
+      .then(result => {
+        setData((data) => [...data, ...result] );
+        console.log(data);
+      }
+      )
       .catch(err => console.log(err))
+  }
 
-  }, []);
+  const handelescroll = () => {
+    if (document.documentElement.clientHeight + window.pageYOffset >= document.documentElement.scrollHeight) {
+      skip = skip + 10
+      fetchPost()
+    }
+  }
 
   const toggleComment = (posts) => {
     if (show) {
