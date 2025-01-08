@@ -94,7 +94,8 @@ router.put("/comment", requireLogin, async (req, res) => {
             new: true
         })
             .populate("comments.postedBy", "_id name")
-            .populate("postedBy", "_id name");
+            .populate("postedBy", "_id name")
+            .populate("postedBy", "_id name photo")
         res.json(result);
     } catch (err) {
         return res.status(422).json({ error: err });

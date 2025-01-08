@@ -61,7 +61,7 @@ const PostDetails = ({ item, toggleDetails }) => {
                     <span className="commenter" style={{ fontWeight: 'bold' }}>
                       {comment.postedBy.name}
                     </span>
-                    <span className="commentText">{comment.comment}</span>
+                    <span className="commentText">{comment.comment}</span>  
                   </p>
                 </div>
               ))}
