@@ -56,7 +56,7 @@ const SignUp = () => {
   const handleSignUp = () => {
     if (!validateForm()) return;
 
-    fetch("http://localhost:5000/signup", {
+    fetch("https://instagram-clone-backend-ncso.onrender.com/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const SignUp = () => {
     const jwtDetail = jwtDecode(credentialResponse.credential);
     console.log(jwtDetail);
 
-    fetch("http://localhost:5000/googleLogin", {
+    fetch("https://instagram-clone-backend-ncso.onrender.com/googleLogin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
